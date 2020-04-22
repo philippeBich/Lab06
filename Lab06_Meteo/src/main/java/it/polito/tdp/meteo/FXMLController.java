@@ -39,6 +39,12 @@ public class FXMLController {
 
 	@FXML
 	private TextArea txtResult;
+	
+	
+	/**
+	 * Il metodo permette di visualizzare la sequenza di città ottima.
+	 * @param event
+	 */
 
     @FXML
     void doCalcolaSequenza(ActionEvent event) {
@@ -57,15 +63,20 @@ public class FXMLController {
 
 
     }
+    
+    /**
+     * Il metodo permette di visualizzare l'umidità media per ogni città.
+     * @param event
+     */
 
     @FXML
     void doCalcolaUmidita(ActionEvent event) {
-    	Month m = boxMese.getValue();
-    	
     	txtResult.clear();
-    	
-		txtResult.appendText(model.getUmiditaMedia(m.getValue()));
+    	//Month m = boxMese.getValue();
+		//txtResult.appendText(model.getUmiditaMedia(m.getValue()));
     }
+    
+    
    	
 	/**
 	 * @param model the model to set
