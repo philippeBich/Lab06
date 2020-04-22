@@ -5,10 +5,7 @@
 package it.polito.tdp.meteo;
 
 import java.net.URL;
-import java.time.Month;
-import java.time.format.TextStyle;
 import java.util.List;
-import java.util.Locale;
 import java.util.ResourceBundle;
 import it.polito.tdp.meteo.model.*;
 import javafx.event.ActionEvent;
@@ -16,11 +13,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
-import javafx.util.StringConverter;
 
 
 public class FXMLController {
 	private Model model;
+	
 
 	@FXML
 	private ResourceBundle resources;
@@ -29,7 +26,7 @@ public class FXMLController {
 	private URL location;
 
 	@FXML
-	private ChoiceBox<Month> boxMese;
+	private ChoiceBox<Integer> boxMese;
 
 	@FXML
 	private Button btnCalcola;
@@ -51,15 +48,15 @@ public class FXMLController {
     	int count=1;
     	txtResult.clear();
     	
-		Month m = boxMese.getValue() ;
-		if(m!=null) {
-			List<Citta> best = model.trovaSequenza(m.getValue()) ;
-			txtResult.appendText("Sequenza ottima per il mese di "+ m.getDisplayName(TextStyle.FULL, Locale.ITALIAN) +":\n");
-			for (Citta s: best) {
-				txtResult.appendText("GIORNO " + count+":  " + s + "\n");
-				count++;
-			}
+		int m = boxMese.getValue() ;
+		
+		List<Citta> best = model.trovaSequenza(m) ;
+		txtResult.appendText("Sequenza ottima per il mese " +m+":\n");
+		for (Citta s: best) {
+			txtResult.appendText("GIORNO " + count+":  " + s + "\n");
+			count++;
 		}
+		
 
 
     }
@@ -72,8 +69,8 @@ public class FXMLController {
     @FXML
     void doCalcolaUmidita(ActionEvent event) {
     	txtResult.clear();
-    	//Month m = boxMese.getValue();
-		//txtResult.appendText(model.getUmiditaMedia(m.getValue()));
+    	int mese = boxMese.getValue();
+		txtResult.appendText(model.getUmiditaMedia(mese));
     }
     
     
@@ -95,25 +92,9 @@ public class FXMLController {
 		
 		// popola la boxMese con i 12 mesi dell'anno
 		for(int mese = 1; mese <= 12 ; mese ++)
-			boxMese.getItems().add(Month.of(mese)) ;
+			boxMese.getItems().add(mese) ;
 		
-		// il setConverter serve a definire un metodo alternativo al toString nativo di <Month> per definire
-		// l'etichetta del bottone. In questo caso lo covertiamo utilizzando la lingua italiana.
-		// La ChoiceBox utilizzerà  quindi il toString di questo StringConverter anziché quello di default.
-		
-		boxMese.setConverter(new StringConverter<Month>() {
-			@Override
-			public String toString(Month m) {
-				return m.getDisplayName(TextStyle.FULL, Locale.ITALIAN) ;
-			}
-			
-			@Override
-			public Month fromString(String string) {
-				return null;
-			}
-		});
-		
-		boxMese.setValue(Month.of(1));
+		boxMese.setValue(1);
 	}
 }
 
